@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>User Management System</title>
+		<link rel="stylesheet" href="main.css" />
+	</head>
+	<body>
+		<h1>User Management System</h1>
+
+		<button onclick="showRegestrationForm('register')">
+			Register Student
+		</button>
+		<button onclick="showRegestrationForm('login')">Login</button>
+		<button onclick="showRegestrationForm('show')">Show Students List</button>
+		<button onclick="showRegestrationForm('search')">
+			Search Student Name
+		</button>
+		<button onclick="showRegestrationForm('delete')">
+			Delete Student Data
+		</button>
+
+		<div id="form-container">
+			<!-- Forms will be dynamically loaded here -->
+		</div>
+
+		<form action="submit()">
+			<input type="text" id="input" />
+		</form>
+
+		<div id="output"></div>
+
+		<script src="index.js" type="text/javascript" />
+	</body>
+</html>

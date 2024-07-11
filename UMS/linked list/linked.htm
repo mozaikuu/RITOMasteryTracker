@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Linked list</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+
+		<body>
+			<div class="container">
+				<h1>Linked List</h1>
+			<div id="form-container">
+
+			<form id="form">
+					<div class="labels">
+						<label for="name">
+						<div class="title">Name: </div>
+						<input type="text" name="name" id="name">
+					</label>
+
+					<label for="password">
+						<div class="title">Password: </div>
+						<input type="password" name="password" id="password">
+					</label>
+					</div>
+
+					<div id="buttons">
+						<div class="button" onclick="formAdd()">Add</div>
+						<div class="button" onclick="formRemove()">Remove</div>
+						<div class="button" onclick="formSearch()">Search</div>
+						<!-- <div class="button" onclick="formUpdate()">Update></div>		 -->
+						<div class="button" onclick="formDisplay()">Display</div>
+					</div>	
+			</form>
+
+			<div class="data">
+				<h2>Students Table</h2>
+				<ul id="list">
+					<li>No Students</li>
+				</ul>
+			</div>
+				
+			</div>
+		</body>
+		<script src="linked.js" type="text/javascript"></script>
+</html>

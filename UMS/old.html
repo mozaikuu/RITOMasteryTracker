@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>User Management System</title>
+		<style>
+			body {
+				font-family: "Roboto", sans-serif;
+				background-color: #f8f8f8;
+				margin: 0;
+				padding: 0;
+				text-align: center;
+			}
+
+			.container {
+				max-width: 800px;
+				margin: 20px auto;
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 8px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			h1 {
+				color: #333;
+				text-align: center;
+				margin: 60px 0 75px;
+			}
+
+			button {
+				padding: 11px 60px;
+				background-color: #4caf50;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+				margin: 20px;
+			}
+
+			button:hover {
+				background-color: #45a049;
+			}
+
+			form {
+				margin-top: 20px;
+			}
+
+			label {
+				display: block;
+				margin-bottom: 8px;
+				color: #000;
+			}
+
+			input {
+				width: 80%;
+				padding: 10px;
+				margin-bottom: 15px;
+				border: 1px solid #ccc;
+				border-radius: 10px;
+				box-sizing: border-box;
+			}
+
+			#output {
+				margin-top: 20px;
+				padding: 15px;
+				border: 1px solid #aca0a0;
+				background-color: #e6e6e6;
+				color: #000000;
+				border-radius: 5px;
+			}
+
+			@media (max-width: 600px) {
+				.container {
+					padding: 10px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<h1>User Management System</h1>
+
+		<button onclick="showForm('register')">Register User</button>
+		<button onclick="showForm('login')">Login</button>
+		<button onclick="showForm('show')">Show User List</button>
+		<button onclick="showForm('search')">Search User</button>
+		<button onclick="showForm('delete')">Delete User</button>
+
+		<div id="form-container">
+			<!-- Forms will be dynamically loaded here -->
+		</div>
+
+		<div id="output"></div>
+
+		<script>
+			class User {
+				constructor(username, password) {
+					this.username = username;
+					this.password = password;
+					this.next = null;
+					this.prev = null;
+				}
+			}
+
+			class UserManager {
+				constructor() {
+					this.head = null;
+				}
+
+				registerUser(username, password) {
+					const newUser = new User(username, password);
+					if (!this.head) {
+						this.head = newUser;
+					} else {
+						let current = this.head;
+						while (current.next) {
+							current = current.next;
+						}
+						current.next = newUser;
+						newUser.prev = current;
+					}
+					return newUser;
+				}
+
+				loginUser(username, password) {
+					let current = this.head;
+					while (current) {
+						if (
+							current.username === username &&
+							current.password === password
+						) {
+							return true;
+						}
+						current = current.next;
+					}
+					return false;
+				}
+
+				showUserList() {
+					let current = this.head;
+					let userList = [];
+					while (current) {
+						userList.push(current.username);
+						current = current.next;
+					}
+					return userList;
+				}
+
+				searchUser(username) {
+					let current = this.head;
+					while (current) {
+						if (current.username === username) {
+							return true;
+						}
+						current = current.next;
+					}
+					return false;
+				}
+
+				deleteUser(username) {
+					let current = this.head;
+					while (current) {
+						if (current.username === username) {
+							if (current.prev) {
+								current.prev.next = current.next;
+							} else {
+								this.head = current.next;
+							}
+							if (current.next) {
+								current.next.prev = current.prev;
+							}
+							return true;
+						}
+						current = current.next;
+					}
+					return false;
+				}
+			}
+
+			const userManger = new UserManager();
+
+			function showForm(formType) {
+				const formContainer = document.getElementById("form-container");
+				formContainer.innerHTML = ""; // Clear previous form content
+
+				switch (formType) {
+					case "register":
+						formContainer.innerHTML = `
+                        <h3>Register User</h3>
+                        <label for="registerUsername">Username:</label>
+                        <input type="text" id="registerUsername" required><br>
+                        <label for="registerPassword">Password:</label>
+                        <input type="password" id="registerPassword" required><br>
+                        <button onclick="registerUser()">Register</button>
+                    `;
+						break;
+
+					case "login":
+						formContainer.innerHTML = `
+                        <h3>Login</h3>
+                        <label for="loginUsername">Username:</label>
+                        <input type="text" id="loginUsername" required><br>
+                        <label for="loginPassword">Password:</label>
+                        <input type="password" id="loginPassword" required><br>
+                        <button onclick="loginUser()">Login</button>
+                    `;
+						break;
+
+					case "show":
+						userManger.showUserList().forEach((username) => {
+							formContainer.innerHTML += <p>${username}</p>;
+						});
+						break;
+
+					case "search":
+						formContainer.innerHTML = `
+                        <h3>Search User</h3>
+                        <label for="searchUsername">Username:</label>
+                        <input type="text" id="searchUsername" required><br>
+                        <button onclick="searchUser()">Search</button>
+                    `;
+						break;
+
+					case "delete":
+						formContainer.innerHTML = `
+                        <h3>Delete User</h3>
+                        <label for="deleteUsername">Username:</label>
+                        <input type="text" id="deleteUsername" required><br>
+                        <button onclick="deleteUser()">Delete</button>
+                    `;
+						break;
+				}
+
+				formContainer.style.display = "block";
+				document.getElementById("output").innerHTML = ""; // Clear previous output
+			}
+
+			function registerUser() {
+				const username = document.getElementById("registerUsername").value;
+				const password = document.getElementById("registerPassword").value;
+
+				userManger.registerUser(username, password);
+				document.getElementById("output").innerText =
+					"User Registered Successfully.";
+			}
+
+			function loginUser() {
+				const username = document.getElementById("loginUsername").value;
+				const password = document.getElementById("loginPassword").value;
+
+				if (userManger.loginUser(username, password)) {
+					document.getElementById("output").innerText =
+						"Login Successfully.";
+				} else {
+					document.getElementById("output").innerText =
+						"Invalid Username or Password.";
+				}
+			}
+
+			function searchUser() {
+				const username = document.getElementById("searchUsername").value;
+
+				if (userManger.searchUser(username)) {
+					document.getElementById("output").innerText = "User Found.";
+				} else {
+					document.getElementById("output").innerText = "User Not Found.";
+				}
+			}
+
+			function deleteUser() {
+				const username = document.getElementById("deleteUsername").value;
+
+				if (userManger.deleteUser(username)) {
+					document.getElementById("output").innerText =
+						"User Removed Successfully.";
+				} else {
+					document.getElementById("output").innerText = "User Not Found.";
+				}
+			}
+		</script>
+	</body>
+</html>
