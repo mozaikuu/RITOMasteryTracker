@@ -1,4 +1,4 @@
-# RGAPI-90154c22-7c4b-4dd4-a01e-355fbc6c3c0e
+
 
 import random
 
@@ -6,7 +6,7 @@ import cassiopeia as cass
 
 # SaFeTy FiRsT
 def get_apikey():
-    f = open("APIKEY.MD", "r")
+    f = open(".gitignore", "r")
     key = f.read()
     return key
 
